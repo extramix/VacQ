@@ -56,6 +56,7 @@ exports.login = async (req, res, next) => {
 };
 const sendTokenResponse = (user, statusCode, res) => {
   const token = user.getSignedJwtToken();
+  console.log(token);
   const options = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
@@ -73,6 +74,6 @@ const sendTokenResponse = (user, statusCode, res) => {
 
 exports.getMe = async (req, res, next) => {
   console.log(req.user);
-  const user = await User.find();
+  const user = await User.findById(req.user.id);
   res.status(200).json({ success: true, data: user });
 };
