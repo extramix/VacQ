@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 
 const hospitals = require("./routes/hospitals");
+const appointments = require("./routes/appointments");
 const auth = require("./routes/auth");
 
 dotenv.config({ path: "./config/config.env" });
@@ -16,6 +17,7 @@ app.use(cookieParser());
 
 app.use("/api/v1/hospitals", hospitals);
 app.use("/api/v1/auth", auth);
+app.use("/api/v1/appointments", appointments);
 
 const PORT = process.env.PORT || 6000;
 const server = app.listen(
