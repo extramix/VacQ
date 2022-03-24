@@ -5,6 +5,7 @@ const {
   createHospital,
   updateHospital,
   deleteHospital,
+  getVacCenters,
 } = require("../controllers/hospitals");
 
 //include other resource routers
@@ -16,6 +17,7 @@ const { protect, authorize } = require("../middleware/auth");
 
 //re-route into other resource routers
 router.use("/:hospitalId/appointments", appointmentRouter);
+router.route("/vacCenters").get(getVacCenters);
 
 router
   .route("/")
