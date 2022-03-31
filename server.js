@@ -7,13 +7,33 @@ const hospitals = require("./routes/hospitals");
 const appointments = require("./routes/appointments");
 const auth = require("./routes/auth");
 
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+
 dotenv.config({ path: "./config/config.env" });
 
 connectDB();
 
 const app = express();
+
 app.use(express.json());
+
 app.use(cookieParser());
+
+// //Sanitize data path
+// app.use(mongoSanitize());
+
+app.use(helmet());
+
+app.use(xss());
+
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 mins
+  max: 1,
+});
+app.use(limiter);
 
 app.use("/api/v1/hospitals", hospitals);
 app.use("/api/v1/auth", auth);
@@ -27,6 +47,6 @@ const server = app.listen(
 
 //handle unhandled promise rejections
 process.on("unhandledRejection", (err, promise) => {
-  console.log(`Error: ${err.message}`.red);
+  console.log(err.red, promise);
   server.close(() => process.exit(1));
 });
